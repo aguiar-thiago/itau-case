@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: api-security-case
+
+server:
+  port: 8080
+  servlet:
+    context-path: /security
+
+logging:
+  level:
+    root: INFO
