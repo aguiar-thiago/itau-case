@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.itau.api.security.exception.JWTException;
+import br.com.itau.api.security.response.ApiResponse;
 import br.com.itau.api.security.service.JWTService;
 
 @RestController
@@ -19,12 +21,11 @@ public class JWTController {
 	private JWTService service;
 
 	@PostMapping(URI_VALIDATE)
-	public ResponseEntity<?> validateJwt(@RequestParam String token) {
-		if (service.validateJWT(token)) {
-			return ResponseEntity.ok("OK");
-		} else {
-			return ResponseEntity.badRequest().body("ERRO");
+	public ResponseEntity<ApiResponse> validateJwt(@RequestParam String token) {
+		try {
+			return ResponseEntity.ok(service.validateJWT(token));
+		} catch (JWTException e) {
+			return ResponseEntity.badRequest().body(new ApiResponse(e));
 		}
-
 	}
 }
