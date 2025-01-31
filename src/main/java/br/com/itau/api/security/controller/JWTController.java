@@ -2,23 +2,29 @@ package br.com.itau.api.security.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.itau.api.security.service.JWTService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/v1/api")
 public class JWTController {
 
-    @Autowired
-    private JWTService service;
+	private static final String URI_VALIDATE = "/validate";
 
-    @PostMapping("/validate")
-    public ResponseEntity<String> validateJWT(@RequestParam String token) {
-        if (service.validateJWT(token)) {
-            return ResponseEntity.ok("JWT Válido");
-        } else {
-            return ResponseEntity.badRequest().body("JWT Inválido");
-        }
-    }
+	@Autowired
+	private JWTService service;
+
+	@PostMapping(URI_VALIDATE)
+	public ResponseEntity<?> validateJwt(@RequestParam String token) {
+		if (service.validateJWT(token)) {
+			return ResponseEntity.ok("OK");
+		} else {
+			return ResponseEntity.badRequest().body("ERRO");
+		}
+
+	}
 }

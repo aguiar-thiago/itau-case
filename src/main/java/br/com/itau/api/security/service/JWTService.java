@@ -1,6 +1,6 @@
 package br.com.itau.api.security.service;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -8,37 +8,41 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import br.com.itau.api.security.utils.JWTUtils;
+import br.com.itau.api.security.validator.ClaimValidator;
+import br.com.itau.api.security.validator.impl.ClaimKeysValidator;
+import br.com.itau.api.security.validator.impl.NameClaimValidator;
+import br.com.itau.api.security.validator.impl.RoleClaimValidator;
+import br.com.itau.api.security.validator.impl.SeedClaimValidator;
 
 @Service
 public class JWTService {
-	public boolean validateJWT(String token) {
-		try {
-			DecodedJWT decodedJWT = JWT.decode(token);
+	
+	private final List<ClaimValidator> claimValidators;
 
-			if (decodedJWT.getClaims().size() != 3) {
-				return false;
-			}
+    public JWTService() {
+        this.claimValidators = List.of(
+        	new ClaimKeysValidator(),
+            new NameClaimValidator(),
+            new RoleClaimValidator(),
+            new SeedClaimValidator()
+        );
+    }
 
-			String name = decodedJWT.getClaim("Name").asString();
-			if (name == null || name.length() > 256 || JWTUtils.containsNumbers(name)) {
-				return false;
-			}
+    public boolean validateJWT(String token) {
+        try {
+            DecodedJWT decodedJWT = JWT.decode(token);
 
-			String role = decodedJWT.getClaim("Role").asString();
-			if (role == null || !Set.of("Admin", "Member", "External").contains(role)) {
-				return false;
-			}
+            for (ClaimValidator validator : claimValidators) {
+                if (!validator.validate(decodedJWT)) {
+                    return false;
+                }
+            }
 
-			int seed = Integer.valueOf(decodedJWT.getClaim("Seed").asString());
-			if (!JWTUtils.isPrime(seed)) {
-				return false;
-			}
-
-			return true;
-		} catch (JWTDecodeException | IllegalArgumentException e) {
-			return false;
-		}
-	}
+            return true;
+        } catch (JWTDecodeException | IllegalArgumentException e) {
+            return false;
+        }
+    }
 
 }
+

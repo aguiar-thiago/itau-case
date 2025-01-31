@@ -13,7 +13,7 @@
 	</parent>
 	<groupId>br.com.itau</groupId>
 	<artifactId>api-security-case</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>api-security-case</name>
 	<description>Applicação case itau</description>
 	
