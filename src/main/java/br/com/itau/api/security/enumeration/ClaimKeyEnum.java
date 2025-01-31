@@ -1,13 +1,13 @@
 package br.com.itau.api.security.enumeration;
 
-public enum ClaimKey {
+public enum ClaimKeyEnum {
     NAME("Name"),
     ROLE("Role"),
     SEED("Seed");
 
     private final String key;
 
-    ClaimKey(String key) {
+    ClaimKeyEnum(String key) {
         this.key = key;
     }
 
