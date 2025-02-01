@@ -9,21 +9,31 @@ import br.com.itau.api.security.exception.JWTException;
 import br.com.itau.api.security.utils.JWTUtils;
 import br.com.itau.api.security.validator.ClaimValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 @Component
 public class NameClaimValidator implements ClaimValidator {
 
-	@Override
-	public boolean validate(DecodedJWT decodedJWT) throws JWTException {
-		String name = decodedJWT.getClaim(ClaimKeyEnum.NAME.getKey()).asString();
+    private static final int MAX_NAME_LENGTH = 256;
 
-		if (name == null || name.length() >= 256 || JWTUtils.containsNumbers(name)) {
-			log.error("O claim NAME está diferente do esperado: {}", name);
-			throw new JWTException("Name incorreto", 400);
-		}
+    @Override
+    public void validate(DecodedJWT decodedJWT) throws JWTException {
+        String name = decodedJWT.getClaim(ClaimKeyEnum.NAME.getKey()).asString();
 
-		return true;
-	}
+        if (StringUtils.isEmpty(name)) {
+            log.error("O claim NAME está vazio ou nulo. Valor recebido: {}", name);
+            throw new JWTException("O valor do claim NAME não pode ser vazio ou nulo.", 400);
+        }
 
+        if (name.length() >= MAX_NAME_LENGTH) {
+            log.error("O claim NAME excede o tamanho máximo permitido. Valor recebido: {}", name);
+            throw new JWTException("O valor do claim NAME excede o tamanho máximo permitido.", 400);
+        }
+
+        if (JWTUtils.containsNumbers(name)) {
+            log.error("O claim NAME contém números, o que não é permitido. Valor recebido: {}", name);
+            throw new JWTException("O valor do claim NAME não pode conter números.", 400);
+        }
+    }
 }

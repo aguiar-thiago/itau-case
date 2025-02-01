@@ -6,8 +6,8 @@ public class JWTException extends Exception {
 	private int errorCode;
 
     public JWTException(String message, int errorCode) {
-        super(message);
-        this.errorCode = errorCode;
+    	super(message);
+    	this.errorCode = errorCode;
     }
 
     public int getErrorCode() {

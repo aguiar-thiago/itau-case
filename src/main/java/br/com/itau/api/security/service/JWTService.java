@@ -43,7 +43,7 @@ public class JWTService {
             return new ApiResponse("JWT válido!", 200);
         } catch (JWTDecodeException e) {
             log.error("Nao foi possivel decodificar o JWT!");
-            throw new JWTException("Erro ao decodificar JWT", 400);
+            throw new JWTException("Erro ao decodificar o JWT!", 400);
         } catch (JWTException e) {
             throw e;
         } catch (Exception e) {

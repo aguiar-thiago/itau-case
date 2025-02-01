@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class ClaimKeysValidator implements ClaimValidator {
+	
+	private static final int EXPECTED_CLAIMS_COUNT = 3;
 
 	private static final Set<String> EXPECTED_KEYS = Set.of(
 			ClaimKeyEnum.NAME.getKey(),
@@ -21,19 +23,19 @@ public class ClaimKeysValidator implements ClaimValidator {
 			ClaimKeyEnum.SEED.getKey());
 
 	@Override
-	public boolean validate(DecodedJWT decodedJWT) throws JWTException {
-		if (decodedJWT.getClaims().size() != 3) {
-			log.error("Numero de claims passado diferente do esperado: {}", String.valueOf(decodedJWT.getClaims().size()));
-			throw new JWTException("Número de claims diferente do esperado", 400);
-		}
-
-		Set<String> claimKeys = decodedJWT.getClaims().keySet();
-		if (!claimKeys.equals(EXPECTED_KEYS) ) {
-			log.error("Claims fornecido diferente do esperado: {}", claimKeys.toString());
-			throw new JWTException("claim nao mapeado", 400);
+	public void validate(DecodedJWT decodedJWT) throws JWTException {
+		int sizeClaims = decodedJWT.getClaims().size();
+		if (decodedJWT.getClaims().size() != EXPECTED_CLAIMS_COUNT) {
+			log.error("Numero de claims passado diferente do esperado: Esperado: {}, mas encontrado: {}", EXPECTED_CLAIMS_COUNT,  sizeClaims);
+			throw new JWTException("Claims fornecidos diferentes do esperado. Esperado: " + EXPECTED_CLAIMS_COUNT + ", mas encontrado: " + sizeClaims, 400);
 		}
 		
-		return true;
+		Set<String> claimKeys = decodedJWT.getClaims().keySet();
+		if (!claimKeys.equals(EXPECTED_KEYS) ) {
+			log.error("Claims enviados não é o esperado! Favor validar. Claims: {}", claimKeys.toString());
+			throw new JWTException("Claims enviados não é o esperado! Favor validar se todos foram enviados.", 400);
+		}
+		
 	}
 
 }

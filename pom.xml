@@ -10,7 +10,7 @@
    
    <groupId>br.com.itau</groupId>
    <artifactId>api-security-case</artifactId>
-   <version>0.0.6-SNAPSHOT</version>
+   <version>0.0.7-SNAPSHOT</version>
    <name>api-security-case</name>
    <description>Applicação case itau</description>
    
@@ -62,6 +62,11 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
       </dependency>
+      
+      <dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+			</dependency>
       
    </dependencies>
    <build>
