@@ -4,51 +4,51 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import br.com.itau.api.security.decode.Base64Decoder;
+import br.com.itau.api.security.decode.JWTDecoder;
 import br.com.itau.api.security.exception.JWTException;
 import br.com.itau.api.security.response.ApiResponse;
 import br.com.itau.api.security.validator.ClaimValidator;
-import br.com.itau.api.security.validator.impl.ClaimKeysValidator;
-import br.com.itau.api.security.validator.impl.NameClaimValidator;
-import br.com.itau.api.security.validator.impl.RoleClaimValidator;
-import br.com.itau.api.security.validator.impl.SeedClaimValidator;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class JWTService {
 
-	private final List<ClaimValidator> claimValidators;
+	private final JWTDecoder jWTDecoder;
+	private final Base64Decoder base64Decoder;
+    private final List<ClaimValidator> claimValidators;
 
-    public JWTService() {
-        this.claimValidators = List.of(
-        	new ClaimKeysValidator(),
-            new NameClaimValidator(),
-            new RoleClaimValidator(),
-            new SeedClaimValidator()
-        );
+    public JWTService(List<ClaimValidator> claimValidators, JWTDecoder jWTDecoder, Base64Decoder base64Decoder) {
+        this.jWTDecoder = jWTDecoder;
+        this.base64Decoder = base64Decoder;
+        this.claimValidators = claimValidators;
     }
 
-	public ApiResponse validateJWT(String token) throws JWTException {
-		try {
-			DecodedJWT decodedJWT = JWT.decode(token);
+    public ApiResponse validateJWT(String token) throws JWTException {
+        try {
+            log.info("Iniciando decode token: {}", token);
+            DecodedJWT decodedJWT = jWTDecoder.decode(token);
 
-			for (ClaimValidator validator : claimValidators) {
-				validator.validate(decodedJWT);
-			}
+            String jsonValue = base64Decoder.decodePayload(decodedJWT.getPayload());
+            log.info("JSON decodificado {}", jsonValue);
 
-			return new ApiResponse("sucesso", 200);
-		} catch (JWTDecodeException e) {
-			throw new JWTException("Erro no decode", 400);
-			
-		} catch (JWTException e) {
-			throw e;
-			
-		} catch (Exception e) {
-			throw new JWTException("Erro inesperado", 500);
-		}
+            for (ClaimValidator validator : claimValidators) {
+                validator.validate(decodedJWT);
+            }
 
-	}
-
+            return new ApiResponse("JWT válido!", 200);
+        } catch (JWTDecodeException e) {
+            log.error("Nao foi possivel decodificar o JWT!");
+            throw new JWTException("Erro ao decodificar JWT", 400);
+        } catch (JWTException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro: ", e);
+            throw new JWTException("Erro inesperado", 500);
+        }
+    }
 }

@@ -7,18 +7,18 @@ import lombok.Getter;
 public class ApiResponse {
 	
 	private int code;
-    private boolean success;
+    private boolean validJWT;
     private String message;
     
     public ApiResponse(String message, int code) {
         this.code = code;
-        this.success = true;
+        this.validJWT = true;
         this.message = message;
     }
 
     public ApiResponse(JWTException e) {
         this.code = e.getErrorCode();
-        this.success = false;
+        this.validJWT = false;
         this.message = e.getMessage();
     }
 
@@ -26,7 +26,7 @@ public class ApiResponse {
     public String toString() {
         return "ApiResponse{" +
                "code=" + code +
-               ", success=" + success +
+               ", success=" + validJWT +
                ", message='" + message + '\'' +
                '}';
     }
