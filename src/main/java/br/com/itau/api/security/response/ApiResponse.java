@@ -22,13 +22,4 @@ public class ApiResponse {
         this.message = e.getMessage();
     }
 
-    @Override
-    public String toString() {
-        return "ApiResponse{" +
-               "code=" + code +
-               ", success=" + validJWT +
-               ", message='" + message + '\'' +
-               '}';
-    }
-
 }
