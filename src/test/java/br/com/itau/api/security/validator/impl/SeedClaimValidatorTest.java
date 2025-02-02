@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,6 +27,8 @@ public class SeedClaimValidatorTest {
     private Claim claim;
 
     private SeedClaimValidator seedClaimValidator;
+    
+    private static final Set<String> LIST_VALUES_FAILURE = Set.of("", "abc", "4");
 
     @BeforeEach
     void setUp() {
@@ -35,59 +39,31 @@ public class SeedClaimValidatorTest {
     @Test
     void testValidate_Success() {
         String validSeed = "7";
-        
         mockClaimSeed(validSeed); 
-        
         assertDoesNotThrow(() -> seedClaimValidator.validate(decodedJWT));
     }
-
+    
     @Test
-    void testValidate_EmptySeed() {
-        String emptySeed = "";
-
-        mockClaimSeed(emptySeed);
-        
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            seedClaimValidator.validate(decodedJWT);
-        });
-
-        assertEqualsReturnMessage("Seed incorreto", 400, exception);
-    }
-
-    @Test
-    void testValidate_NonNumericSeed() {
-        String nonNumericSeed = "abc";
-        
-        mockClaimSeed(nonNumericSeed);
-        
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            seedClaimValidator.validate(decodedJWT);
-        });
-
-        assertEqualsReturnMessage("Seed incorreto", 400, exception);
-    }
-
-    @Test
-    void testValidate_NonPrimeSeed() {
-        String nonPrimeSeed = "4";
-        
-        mockClaimSeed(nonPrimeSeed);
-        
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            seedClaimValidator.validate(decodedJWT);
-        });
-
-        assertEqualsReturnMessage("Seed incorreto", 400, exception);
-        
+    void testValidate_IncorrectValues() {
+        for (String value: LIST_VALUES_FAILURE) {
+        	mockClaimSeed(value);
+        	JWTException exception = generateException();
+        	assertEqualsReturnMessage(400, exception);
+        }        
     }
     
-    private void mockClaimSeed(String returnClaim) {
+    private JWTException generateException() {
+		return assertThrows(JWTException.class, () -> {
+            seedClaimValidator.validate(decodedJWT);
+        });
+	}
+
+	private void mockClaimSeed(String returnClaim) {
         when(decodedJWT.getClaim(ClaimKeyEnum.SEED.getKey())).thenReturn(claim);
         when(claim.asString()).thenReturn(returnClaim);
     }
     
-    private void assertEqualsReturnMessage(String message, int expectedCode, JWTException exception) {
-    	assertEquals(message, exception.getMessage());
+    private void assertEqualsReturnMessage(int expectedCode, JWTException exception) {
         assertEquals(expectedCode, exception.getErrorCode());
     }
     

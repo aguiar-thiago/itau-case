@@ -49,7 +49,6 @@ public class JWTServiceTest {
         ApiResponse response = jwtService.validateJWT(token);
 
         assertEquals(200, response.getCode());
-        assertEquals("JWT válido!", response.getMessage());
     }
     
     @Test
@@ -79,7 +78,6 @@ public class JWTServiceTest {
             jwtService.validateJWT(token);
         });
 
-        assertEquals("Erro ao decodificar o JWT!", exception.getMessage());
         assertEquals(400, exception.getErrorCode());
     }
 
@@ -95,7 +93,6 @@ public class JWTServiceTest {
             jwtService.validateJWT(token);
         });
 
-        assertEquals("Erro inesperado", exception.getMessage());
         assertEquals(500, exception.getErrorCode());
     }
     

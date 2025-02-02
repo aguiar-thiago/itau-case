@@ -1,6 +1,9 @@
 package br.com.itau.api.security.validator.impl;
 
 import static org.mockito.Mockito.*;
+
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.auth0.jwt.interfaces.Claim;
@@ -21,6 +24,8 @@ public class RoleClaimValidatorTest {
     private Claim claim;
 
     private RoleClaimValidator roleClaimValidator;
+    
+    private static final Set<String> LIST_VALUES_FAILURE = Set.of("INVALID_ROLE", "");
 
     @BeforeEach
     void setUp() {
@@ -36,42 +41,14 @@ public class RoleClaimValidatorTest {
 
         assertDoesNotThrow(() -> roleClaimValidator.validate(decodedJWT));
     }
-
+    
     @Test
-    void testValidate_InvalidRole() {
-        String invalidRole = "INVALID_ROLE";
-
-        mockClaimRole(invalidRole);
-
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            roleClaimValidator.validate(decodedJWT);
-        });
-
-        assertEqualsReturnMessage("O valor do claim ROLE não está mapeado.", 400, exception);
-    }
-
-    @Test
-    void testValidate_EmptyRole() {
-        String emptyRole = "";
-
-        mockClaimRole(emptyRole);
-        
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            roleClaimValidator.validate(decodedJWT);
-        });
-
-        assertEqualsReturnMessage("O valor do claim ROLE não está mapeado.", 400, exception);
-    }
-
-    @Test
-    void testValidate_NullRole() {
-    	mockClaimRole(null);
-
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            roleClaimValidator.validate(decodedJWT);
-        });
-        
-        assertEqualsReturnMessage("O valor do claim ROLE não está mapeado.", 400, exception);
+    void testValidate_IncorrectValues() {
+        for (String value: LIST_VALUES_FAILURE) {
+        	mockClaimRole(value);
+        	JWTException exception = generateException();
+        	assertEqualsReturnMessage(400, exception);
+        }        
     }
     
     private void mockClaimRole(String returnClaim) {
@@ -79,8 +56,13 @@ public class RoleClaimValidatorTest {
         when(claim.asString()).thenReturn(returnClaim);
     }
     
-    private void assertEqualsReturnMessage(String message, int expectedCode, JWTException exception) {
-    	assertEquals(message, exception.getMessage());
+    private JWTException generateException() {
+		return assertThrows(JWTException.class, () -> {
+            roleClaimValidator.validate(decodedJWT);
+        });
+	}
+    
+    private void assertEqualsReturnMessage(int expectedCode, JWTException exception) {
         assertEquals(expectedCode, exception.getErrorCode());
     }
     

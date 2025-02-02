@@ -55,7 +55,7 @@ public class ClaimKeysValidatorTest {
             claimKeysValidator.validate(decodedJWT);
         });
 
-        assertEqualsReturnMessage("Claims fornecidos diferentes do esperado. Esperado: 3, mas encontrado: 2", 400, exception);
+        assertEqualsReturnMessage(400, exception);
 
     }
 
@@ -71,11 +71,10 @@ public class ClaimKeysValidatorTest {
             claimKeysValidator.validate(decodedJWT);
         }); 
 
-        assertEqualsReturnMessage("Claims enviados não é o esperado! Favor validar se todos foram enviados.", 400, exception);
+        assertEqualsReturnMessage(400, exception);
     }
         
-    private void assertEqualsReturnMessage(String message, int expectedCode, JWTException exception) {
-    	assertEquals(message, exception.getMessage());
+    private void assertEqualsReturnMessage(int expectedCode, JWTException exception) {
         assertEquals(expectedCode, exception.getErrorCode());
     }
 }

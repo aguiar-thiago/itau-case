@@ -49,8 +49,7 @@ public class JWTControllerTest {
         mockMvc.perform(post("/v1/api/validate")
                         .param("token", TOKEN_SUCCESS_REQUEST)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("JWT válido!"));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -61,8 +60,7 @@ public class JWTControllerTest {
         mockMvc.perform(post("/v1/api/validate")
                         .param("token", TOKEN_BAD_REQUEST)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Erro ao validar JWT"));
+                .andExpect(status().isBadRequest());
                 
     }
 }

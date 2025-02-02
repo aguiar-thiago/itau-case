@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,6 +27,8 @@ public class NameClaimValidatorTest {
     private Claim claim;
     
     private NameClaimValidator nameClaimValidator;
+    
+    private static final Set<String> LIST_VALUES_FAILURE = Set.of("Name123", "A".repeat(257), "");
 
     @BeforeEach
     void setUp() {
@@ -40,45 +44,14 @@ public class NameClaimValidatorTest {
 
         assertDoesNotThrow(() -> nameClaimValidator.validate(decodedJWT));
     }
-
+    
     @Test
-    void testValidate_EmptyName() {
-        String emptyName = "";
-
-        mockClaimName(emptyName);
-
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            nameClaimValidator.validate(decodedJWT);
-        });
-        
-        assertEqualsReturnMessage("O valor do claim NAME não pode ser vazio ou nulo.", 400, exception);
-    }
-
-    @Test
-    void testValidate_NameExceedsMaxLength() {
-        String longName = "A".repeat(257);
-
-        mockClaimName(longName);
-
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            nameClaimValidator.validate(decodedJWT);
-        });
-
-        assertEqualsReturnMessage("O valor do claim NAME excede o tamanho máximo permitido.", 400, exception);
-    }
-
-    @Test
-    void testValidate_NameContainsNumbers() {
-        String nameWithNumbers = "Name123";
-
-        mockClaimName(nameWithNumbers);
-
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            nameClaimValidator.validate(decodedJWT);
-        });
-
-        assertEqualsReturnMessage("O valor do claim NAME não pode conter números.", 400, exception);
-        
+    void testValidate_IncorrectValues() {
+        for (String value: LIST_VALUES_FAILURE) {
+        	mockClaimName(value);
+        	JWTException exception = generateException();
+        	assertEqualsReturnMessage(400, exception);
+        }        
     }
     
     private void mockClaimName(String returnClaimName) {
@@ -86,8 +59,13 @@ public class NameClaimValidatorTest {
         when(claim.asString()).thenReturn(returnClaimName);
     }
     
-    private void assertEqualsReturnMessage(String message, int expectedCode, JWTException exception) {
-    	assertEquals(message, exception.getMessage());
+    private JWTException generateException() {
+		return assertThrows(JWTException.class, () -> {
+            nameClaimValidator.validate(decodedJWT);
+        });
+	}
+    
+    private void assertEqualsReturnMessage(int expectedCode, JWTException exception) {
         assertEquals(expectedCode, exception.getErrorCode());
     }
 

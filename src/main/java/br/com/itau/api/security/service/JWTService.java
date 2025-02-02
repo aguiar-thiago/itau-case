@@ -40,7 +40,7 @@ public class JWTService {
                 validator.validate(decodedJWT);
             }
 
-            return new ApiResponse("JWT válido!", 200);
+            return new ApiResponse("JWT valido!", 200);
         } catch (JWTDecodeException e) {
             log.error("Nao foi possivel decodificar o JWT!");
             throw new JWTException("Erro ao decodificar o JWT!", 400);
