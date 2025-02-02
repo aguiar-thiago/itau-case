@@ -24,7 +24,7 @@ public class ClaimKeysValidator implements ClaimValidator {
 
 	@Override
 	public void validate(DecodedJWT decodedJWT) throws JWTException {
-		int sizeClaims = decodedJWT.getClaims().size();
+		var sizeClaims = decodedJWT.getClaims().size();
 		if (decodedJWT.getClaims().size() != EXPECTED_CLAIMS_COUNT) {
 			log.error("Numero de claims passado diferente do esperado: Esperado: {}, mas encontrado: {}", EXPECTED_CLAIMS_COUNT,  sizeClaims);
 			throw new JWTException("Claims fornecidos diferentes do esperado. Esperado: " + EXPECTED_CLAIMS_COUNT + ", mas encontrado: " + sizeClaims);

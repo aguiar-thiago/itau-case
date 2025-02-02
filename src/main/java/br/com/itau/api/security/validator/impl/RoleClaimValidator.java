@@ -24,7 +24,7 @@ public class RoleClaimValidator implements ClaimValidator {
 
     @Override
     public void validate(DecodedJWT decodedJWT) throws JWTException {
-        String role = decodedJWT.getClaim(ClaimKeyEnum.ROLE.getKey()).asString();
+        var role = decodedJWT.getClaim(ClaimKeyEnum.ROLE.getKey()).asString();
 
         isEmptyValue(ClaimKeyEnum.ROLE, role);
         

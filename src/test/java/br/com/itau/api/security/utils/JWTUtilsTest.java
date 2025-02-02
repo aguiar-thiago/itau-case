@@ -8,43 +8,43 @@ public class JWTUtilsTest {
 
     @Test
     void testContainsNumbers_WithNumbers() {
-        String str = "abc123";
+    	var str = "abc123";
         assertTrue(JWTUtils.containsNumbers(str), "A string deve conter números.");
     }
 
     @Test
     void testContainsNumbers_WithoutNumbers() {
-        String str = "abc";
+    	var str = "abc";
         assertFalse(JWTUtils.containsNumbers(str), "A string não deve conter números.");
     }
 
     @Test
     void testIsPrime_WithPrimeNumber() {
-        int number = 5;
+    	var number = 5;
         assertTrue(JWTUtils.isPrime(number), "5 deve ser um número primo.");
     }
 
     @Test
     void testIsPrime_WithPrimeNumber2() {
-        int number = 7841;
+    	var number = 7841;
         assertTrue(JWTUtils.isPrime(number), "7841 deve ser um número primo.");
     }
 
     @Test
     void testIsPrime_WithNegativeNumber() {
-        int number = -3;
+    	var number = -3;
         assertFalse(JWTUtils.isPrime(number), "-3 não é um número primo.");
     }
 
     @Test
     void testIsPrime_WithZero() {
-        int number = 7842;
+    	var number = 7842;
         assertFalse(JWTUtils.isPrime(number), "7842 não é um número primo.");
     }
 
     @Test
     void testIsPrime_primeEvenNumber() {
-        int number = 2;
+    	var number = 2;
         assertTrue(JWTUtils.isPrime(number), "2 o único número par primo.");
     }
 }

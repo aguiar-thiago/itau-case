@@ -51,7 +51,7 @@ public class ClaimKeysValidatorTest {
                 "Role", claim
         ));
 
-        JWTException exception = assertThrows(JWTException.class, () -> {
+        var exception = assertThrows(JWTException.class, () -> {
             claimKeysValidator.validate(decodedJWT);
         });
 
@@ -67,7 +67,7 @@ public class ClaimKeysValidatorTest {
                 "IncorrectKey", claim
         ));
 
-        JWTException exception = assertThrows(JWTException.class, () -> {
+        var exception = assertThrows(JWTException.class, () -> {
             claimKeysValidator.validate(decodedJWT);
         }); 
 

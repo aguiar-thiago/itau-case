@@ -16,7 +16,7 @@ public class SeedClaimValidator implements ClaimValidator {
 
 	@Override
 	public void validate(DecodedJWT decodedJWT) throws JWTException {
-		String seedValue = decodedJWT.getClaim(ClaimKeyEnum.SEED.getKey()).asString();
+		var seedValue = decodedJWT.getClaim(ClaimKeyEnum.SEED.getKey()).asString();
 
 		isEmptyValue(ClaimKeyEnum.SEED, seedValue);
 

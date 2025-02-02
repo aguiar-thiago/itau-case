@@ -20,11 +20,8 @@ public class Base64PayloadProcessorTest {
 
 	@Test
 	void testDecode_Success() {
-		String token = "eyJSb2xlIjoiQWRtaW4iLCJTZWVkIjoiNzg0MSIsIk5hbWUiOiJUb25pbmhvIEFyYXVqbyJ9";
-
-		String result = base64PayloadProcessor.decodePayload(token);
-
-		assertNotNull(result);
+		var token = "eyJSb2xlIjoiQWRtaW4iLCJTZWVkIjoiNzg0MSIsIk5hbWUiOiJUb25pbmhvIEFyYXVqbyJ9";
+		assertNotNull( base64PayloadProcessor.decodePayload(token));
 	}
 
 }

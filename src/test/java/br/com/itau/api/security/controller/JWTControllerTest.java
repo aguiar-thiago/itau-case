@@ -38,7 +38,7 @@ public class JWTControllerTest {
 
     @Test
     void testValidateJwt_Success() throws Exception {
-        boolean response = true;
+        var response = true;
         
         when(jwtService.validateJWT(anyString())).thenReturn(response);
 

@@ -45,8 +45,9 @@ public class JWTServiceTest {
 
     @Test
     void testValidateJWT_Success() throws Exception {
-        String token = "validToken";
-        DecodedJWT decodedJWT = mock(DecodedJWT.class);
+        var token = "validToken";
+        var decodedJWT = mock(DecodedJWT.class);
+        
         when(jwtDecoder.decode(token)).thenReturn(decodedJWT);
         when(base64Decoder.decodePayload(anyString())).thenReturn("decodedPayload");
         doNothing().when(claimValidator).validate(decodedJWT);
@@ -56,11 +57,11 @@ public class JWTServiceTest {
     
     @Test
     void testValidateJWT_JWTException() throws Exception {
-        String token = "validToken";
-        DecodedJWT decodedJWT = mock(DecodedJWT.class);
+    	var token = "validToken";
+    	var decodedJWT = mock(DecodedJWT.class);
+    	
         when(jwtDecoder.decode(token)).thenReturn(decodedJWT);
         when(base64Decoder.decodePayload(anyString())).thenReturn("decodedPayload");
-        
         doThrow(new JWTException("Erro na validação do claim")).when(claimValidator).validate(decodedJWT);
 
         assertEquals(false, jwtService.validateJWT(token));
@@ -68,7 +69,8 @@ public class JWTServiceTest {
 
     @Test
     void testValidateJWT_Fail_DecodeException() {
-        String token = "invalidToken";
+    	var token = "invalidToken";
+    	
         when(jwtDecoder.decode(token)).thenThrow(new JWTDecodeException("Erro ao decodificar o JWT"));
 
         assertEquals(false, jwtService.validateJWT(token));
@@ -76,8 +78,9 @@ public class JWTServiceTest {
 
     @Test
     void testValidateJWT_Fail_GeneralException() throws Exception {
-        String token = "validToken";
-        DecodedJWT decodedJWT = mock(DecodedJWT.class);
+    	var token = "validToken";
+    	var decodedJWT = mock(DecodedJWT.class);
+    	
         when(jwtDecoder.decode(token)).thenReturn(decodedJWT);
         when(base64Decoder.decodePayload(anyString())).thenReturn("decodedPayload");
         doThrow(new RuntimeException("Erro inesperado")).when(claimValidator).validate(decodedJWT);

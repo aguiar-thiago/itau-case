@@ -18,7 +18,7 @@ public class NameClaimValidator implements ClaimValidator {
 
     @Override
     public void validate(DecodedJWT decodedJWT) throws JWTException {
-        String name = decodedJWT.getClaim(ClaimKeyEnum.NAME.getKey()).asString();
+        var name = decodedJWT.getClaim(ClaimKeyEnum.NAME.getKey()).asString();
 
         isEmptyValue(ClaimKeyEnum.NAME, name);
 

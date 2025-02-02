@@ -35,7 +35,7 @@ public class RoleClaimValidatorTest {
 
     @Test
     void testValidate_Success() {
-        String validRole = RoleEnum.ADMIN.getValue();
+    	var validRole = RoleEnum.ADMIN.getValue();
 
         mockClaimRole(validRole);
 
@@ -44,7 +44,7 @@ public class RoleClaimValidatorTest {
     
     @Test
     void testValidate_IncorrectValues() {
-        for (String value: LIST_VALUES_FAILURE) {
+        for (var value: LIST_VALUES_FAILURE) {
         	mockClaimRole(value);
         	JWTException exception = generateException();
         	assertEqualsReturnMessage(exception);

@@ -38,14 +38,14 @@ public class SeedClaimValidatorTest {
 
     @Test
     void testValidate_Success() {
-        String validSeed = "7";
+    	var validSeed = "7";
         mockClaimSeed(validSeed); 
         assertDoesNotThrow(() -> seedClaimValidator.validate(decodedJWT));
     }
     
     @Test
     void testValidate_IncorrectValues() {
-        for (String value: LIST_VALUES_FAILURE) {
+        for (var value: LIST_VALUES_FAILURE) {
         	mockClaimSeed(value);
         	JWTException exception = generateException();
         	assertEqualsReturnMessage(exception); 

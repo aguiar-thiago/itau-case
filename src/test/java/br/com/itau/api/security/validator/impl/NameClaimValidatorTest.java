@@ -38,7 +38,7 @@ public class NameClaimValidatorTest {
 
     @Test
     void testValidate_Success() {
-        String validName = "ValidName";
+    	var validName = "ValidName";
         
         mockClaimName(validName);
 
@@ -47,7 +47,7 @@ public class NameClaimValidatorTest {
     
     @Test
     void testValidate_IncorrectValues() {
-        for (String value: LIST_VALUES_FAILURE) {
+        for (var value: LIST_VALUES_FAILURE) {
         	mockClaimName(value);
         	JWTException exception = generateException();
 			assertEqualsReturnMessage(exception);
