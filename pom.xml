@@ -10,7 +10,7 @@
    
    <groupId>br.com.itau</groupId>
    <artifactId>api-security-case</artifactId>
-   <version>0.0.8-SNAPSHOT</version>
+   <version>0.0.9-SNAPSHOT</version>
    <name>api-security-case</name>
    <description>Applicação case itau</description>
    
@@ -72,6 +72,11 @@
       	<groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
     	</dependency>
+    	
+			<dependency>
+			    <groupId>io.micrometer</groupId>
+			    <artifactId>micrometer-registry-prometheus</artifactId>
+			</dependency>
       
    </dependencies>
    <build>
