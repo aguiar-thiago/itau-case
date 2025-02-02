@@ -15,7 +15,27 @@ management:
   endpoints:
     web:
       exposure:
-        include: 'health,prometheus'
+        include: '*'
+
   endpoint:
     prometheus:
       enabled: true
+    health:
+      show-details: always
+
+  tracing:
+    sampling:
+      probability: 1.0
+
+  metrics:
+    enable:
+      jvm: true
+    tags:
+      application: 'case-itau'
+    distribution:
+      slo:
+        http: '5ms,10ms,25ms,50ms,100ms,200ms,300ms,400ms,500ms,1s,2s'
+      percentiles-histogram:
+        http:
+          server:
+            request: true
