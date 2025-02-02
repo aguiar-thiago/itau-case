@@ -9,7 +9,6 @@ import br.com.itau.api.security.exception.JWTException;
 import br.com.itau.api.security.utils.JWTUtils;
 import br.com.itau.api.security.validator.ClaimValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 @Component
@@ -21,10 +20,7 @@ public class NameClaimValidator implements ClaimValidator {
     public void validate(DecodedJWT decodedJWT) throws JWTException {
         String name = decodedJWT.getClaim(ClaimKeyEnum.NAME.getKey()).asString();
 
-        if (StringUtils.isEmpty(name)) {
-            log.error("O claim NAME está vazio ou nulo. Valor recebido: {}", name);
-            throw new JWTException("O valor do claim NAME não pode ser vazio ou nulo.");
-        }
+        isEmptyValue(ClaimKeyEnum.NAME, name);
 
         if (name.length() >= MAX_NAME_LENGTH) {
             log.error("O claim NAME excede o tamanho máximo permitido. Valor recebido: {}", name);

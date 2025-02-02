@@ -10,7 +10,7 @@
    
    <groupId>br.com.itau</groupId>
    <artifactId>api-security-case</artifactId>
-   <version>0.0.12-SNAPSHOT</version>
+   <version>0.0.13-SNAPSHOT</version>
    <name>api-security-case</name>
    <description>Applicação case itau</description>
    

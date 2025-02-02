@@ -2,7 +2,6 @@ package br.com.itau.api.security.validator.impl;
 
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -27,7 +26,9 @@ public class RoleClaimValidator implements ClaimValidator {
     public void validate(DecodedJWT decodedJWT) throws JWTException {
         String role = decodedJWT.getClaim(ClaimKeyEnum.ROLE.getKey()).asString();
 
-        if (StringUtils.isEmpty(role) || !VALID_ROLES.contains(role)) {
+        isEmptyValue(ClaimKeyEnum.ROLE, role);
+        
+        if (!VALID_ROLES.contains(role)) {
         	log.error("O valor do claim ROLE não está mapeado ou é inválido: Role: {}", role);
         	throw new JWTException("O valor do claim ROLE não está mapeado.");
         }

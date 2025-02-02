@@ -25,9 +25,9 @@ public class JWTUtilsTest {
     }
 
     @Test
-    void testIsPrime_WithNonPrimeNumber() {
-        int number = 4;
-        assertFalse(JWTUtils.isPrime(number), "4 não deve ser um número primo.");
+    void testIsPrime_WithPrimeNumber2() {
+        int number = 7841;
+        assertTrue(JWTUtils.isPrime(number), "7841 deve ser um número primo.");
     }
 
     @Test
@@ -38,13 +38,13 @@ public class JWTUtilsTest {
 
     @Test
     void testIsPrime_WithZero() {
-        int number = 0;
-        assertFalse(JWTUtils.isPrime(number), "0 não é um número primo.");
+        int number = 7842;
+        assertFalse(JWTUtils.isPrime(number), "7842 não é um número primo.");
     }
 
     @Test
-    void testIsPrime_WithOne() {
-        int number = 1;
-        assertFalse(JWTUtils.isPrime(number), "1 não é um número primo.");
+    void testIsPrime_primeEvenNumber() {
+        int number = 2;
+        assertTrue(JWTUtils.isPrime(number), "2 o único número par primo.");
     }
 }

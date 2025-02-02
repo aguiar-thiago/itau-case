@@ -1,6 +1,5 @@
 package br.com.itau.api.security.validator.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -19,10 +18,7 @@ public class SeedClaimValidator implements ClaimValidator {
 	public void validate(DecodedJWT decodedJWT) throws JWTException {
 		String seedValue = decodedJWT.getClaim(ClaimKeyEnum.SEED.getKey()).asString();
 
-		if (StringUtils.isEmpty(seedValue)) {
-			log.error("O claim SEED está nulo ou vazio!");
-			throw new JWTException("O claim SEED não pode ser nulo/vazio");
-		}
+		isEmptyValue(ClaimKeyEnum.SEED, seedValue);
 
 		int seed;
 		try {
