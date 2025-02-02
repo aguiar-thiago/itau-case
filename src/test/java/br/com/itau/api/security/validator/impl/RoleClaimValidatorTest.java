@@ -47,7 +47,7 @@ public class RoleClaimValidatorTest {
         for (String value: LIST_VALUES_FAILURE) {
         	mockClaimRole(value);
         	JWTException exception = generateException();
-        	assertEqualsReturnMessage(400, exception);
+        	assertEqualsReturnMessage(exception);
         }        
     }
     
@@ -62,8 +62,8 @@ public class RoleClaimValidatorTest {
         });
 	}
     
-    private void assertEqualsReturnMessage(int expectedCode, JWTException exception) {
-        assertEquals(expectedCode, exception.getErrorCode());
+    private void assertEqualsReturnMessage(JWTException exception) {
+    	assertEquals(JWTException.class, exception.getClass());;
     }
     
 }

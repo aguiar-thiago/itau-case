@@ -10,7 +10,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import br.com.itau.api.security.decode.Base64Decoder;
 import br.com.itau.api.security.decode.JWTDecoder;
 import br.com.itau.api.security.exception.JWTException;
-import br.com.itau.api.security.response.ApiResponse;
 import br.com.itau.api.security.validator.ClaimValidator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class JWTService {
 
+	private final static boolean RESPONSE_TRUE = true;
+	private final static boolean RESPONSE_FALSE = false;
+	
 	private final JWTDecoder jWTDecoder;
 	private final Base64Decoder base64Decoder;
     private final List<ClaimValidator> claimValidators;
@@ -28,7 +30,7 @@ public class JWTService {
         this.claimValidators = claimValidators;
     }
 
-    public ApiResponse validateJWT(String token) throws JWTException {
+    public boolean validateJWT(String token) {
         try {
             log.info("Iniciando decode token: {}", token);
             DecodedJWT decodedJWT = jWTDecoder.decode(token);
@@ -40,15 +42,17 @@ public class JWTService {
                 validator.validate(decodedJWT);
             }
 
-            return new ApiResponse("JWT valido!", 200);
+            return RESPONSE_TRUE;
         } catch (JWTDecodeException e) {
             log.error("Nao foi possivel decodificar o JWT!");
-            throw new JWTException("Erro ao decodificar o JWT!", 400);
+            return RESPONSE_FALSE;
+            
         } catch (JWTException e) {
-            throw e;
+        	return RESPONSE_FALSE;
+        	
         } catch (Exception e) {
-            log.error("Erro: ", e);
-            throw new JWTException("Erro inesperado", 500);
+            log.error("Erro generico: ", e);
+            return RESPONSE_FALSE;
         }
     }
 }

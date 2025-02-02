@@ -1,22 +1,27 @@
 package br.com.itau.api.security.service;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.*;
-
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import br.com.itau.api.security.decode.Base64Decoder;
-import br.com.itau.api.security.decode.JWTDecoder;
-import br.com.itau.api.security.exception.JWTException;
-import br.com.itau.api.security.response.ApiResponse;
-import br.com.itau.api.security.validator.ClaimValidator;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import br.com.itau.api.security.decode.Base64Decoder;
+import br.com.itau.api.security.decode.JWTDecoder;
+import br.com.itau.api.security.exception.JWTException;
+import br.com.itau.api.security.validator.ClaimValidator;
 
 public class JWTServiceTest {
 
@@ -46,9 +51,7 @@ public class JWTServiceTest {
         when(base64Decoder.decodePayload(anyString())).thenReturn("decodedPayload");
         doNothing().when(claimValidator).validate(decodedJWT);
 
-        ApiResponse response = jwtService.validateJWT(token);
-
-        assertEquals(200, response.getCode());
+        assertEquals(true, jwtService.validateJWT(token));
     }
     
     @Test
@@ -58,15 +61,9 @@ public class JWTServiceTest {
         when(jwtDecoder.decode(token)).thenReturn(decodedJWT);
         when(base64Decoder.decodePayload(anyString())).thenReturn("decodedPayload");
         
-        doThrow(new JWTException("Erro na validação do claim", 400)).when(claimValidator).validate(decodedJWT);
+        doThrow(new JWTException("Erro na validação do claim")).when(claimValidator).validate(decodedJWT);
 
-
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            jwtService.validateJWT(token);
-        });
-
-        assertEquals("Erro na validação do claim", exception.getMessage());
-        assertEquals(400, exception.getErrorCode());
+        assertEquals(false, jwtService.validateJWT(token));
     }
 
     @Test
@@ -74,11 +71,7 @@ public class JWTServiceTest {
         String token = "invalidToken";
         when(jwtDecoder.decode(token)).thenThrow(new JWTDecodeException("Erro ao decodificar o JWT"));
 
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            jwtService.validateJWT(token);
-        });
-
-        assertEquals(400, exception.getErrorCode());
+        assertEquals(false, jwtService.validateJWT(token));
     }
 
     @Test
@@ -89,11 +82,7 @@ public class JWTServiceTest {
         when(base64Decoder.decodePayload(anyString())).thenReturn("decodedPayload");
         doThrow(new RuntimeException("Erro inesperado")).when(claimValidator).validate(decodedJWT);
 
-        JWTException exception = assertThrows(JWTException.class, () -> {
-            jwtService.validateJWT(token);
-        });
-
-        assertEquals(500, exception.getErrorCode());
+        assertEquals(false, jwtService.validateJWT(token));
     }
     
 }

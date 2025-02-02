@@ -50,7 +50,7 @@ public class NameClaimValidatorTest {
         for (String value: LIST_VALUES_FAILURE) {
         	mockClaimName(value);
         	JWTException exception = generateException();
-        	assertEqualsReturnMessage(400, exception);
+			assertEqualsReturnMessage(exception);
         }        
     }
     
@@ -65,8 +65,8 @@ public class NameClaimValidatorTest {
         });
 	}
     
-    private void assertEqualsReturnMessage(int expectedCode, JWTException exception) {
-        assertEquals(expectedCode, exception.getErrorCode());
+    private void assertEqualsReturnMessage(JWTException exception) {
+        assertEquals(JWTException.class, exception.getClass());
     }
 
 

@@ -48,7 +48,7 @@ public class SeedClaimValidatorTest {
         for (String value: LIST_VALUES_FAILURE) {
         	mockClaimSeed(value);
         	JWTException exception = generateException();
-        	assertEqualsReturnMessage(400, exception);
+        	assertEqualsReturnMessage(exception); 
         }        
     }
     
@@ -63,8 +63,8 @@ public class SeedClaimValidatorTest {
         when(claim.asString()).thenReturn(returnClaim);
     }
     
-    private void assertEqualsReturnMessage(int expectedCode, JWTException exception) {
-        assertEquals(expectedCode, exception.getErrorCode());
+    private void assertEqualsReturnMessage(JWTException exception) {
+    	 assertEquals(JWTException.class, exception.getClass());
     }
     
 }

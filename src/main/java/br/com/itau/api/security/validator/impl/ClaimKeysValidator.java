@@ -27,13 +27,13 @@ public class ClaimKeysValidator implements ClaimValidator {
 		int sizeClaims = decodedJWT.getClaims().size();
 		if (decodedJWT.getClaims().size() != EXPECTED_CLAIMS_COUNT) {
 			log.error("Numero de claims passado diferente do esperado: Esperado: {}, mas encontrado: {}", EXPECTED_CLAIMS_COUNT,  sizeClaims);
-			throw new JWTException("Claims fornecidos diferentes do esperado. Esperado: " + EXPECTED_CLAIMS_COUNT + ", mas encontrado: " + sizeClaims, 400);
+			throw new JWTException("Claims fornecidos diferentes do esperado. Esperado: " + EXPECTED_CLAIMS_COUNT + ", mas encontrado: " + sizeClaims);
 		}
 		
 		Set<String> claimKeys = decodedJWT.getClaims().keySet();
 		if (!claimKeys.equals(EXPECTED_KEYS) ) {
 			log.error("Claims enviados não é o esperado! Favor validar. Claims: {}", claimKeys.toString());
-			throw new JWTException("Claims enviados não é o esperado! Favor validar se todos foram enviados.", 400);
+			throw new JWTException("Claims enviados não é o esperado! Favor validar se todos foram enviados.");
 		}
 		
 	}

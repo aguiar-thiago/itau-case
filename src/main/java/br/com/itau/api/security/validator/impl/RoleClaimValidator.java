@@ -29,7 +29,7 @@ public class RoleClaimValidator implements ClaimValidator {
 
         if (StringUtils.isEmpty(role) || !VALID_ROLES.contains(role)) {
         	log.error("O valor do claim ROLE não está mapeado ou é inválido: Role: {}", role);
-        	throw new JWTException("O valor do claim ROLE não está mapeado.", 400);
+        	throw new JWTException("O valor do claim ROLE não está mapeado.");
         }
     }
 

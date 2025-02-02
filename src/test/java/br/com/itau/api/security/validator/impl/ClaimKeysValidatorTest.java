@@ -55,7 +55,7 @@ public class ClaimKeysValidatorTest {
             claimKeysValidator.validate(decodedJWT);
         });
 
-        assertEqualsReturnMessage(400, exception);
+        assertEqualsReturnMessage(exception);
 
     }
 
@@ -71,10 +71,10 @@ public class ClaimKeysValidatorTest {
             claimKeysValidator.validate(decodedJWT);
         }); 
 
-        assertEqualsReturnMessage(400, exception);
+        assertEqualsReturnMessage(exception);
     }
         
-    private void assertEqualsReturnMessage(int expectedCode, JWTException exception) {
-        assertEquals(expectedCode, exception.getErrorCode());
+    private void assertEqualsReturnMessage(JWTException exception) {
+    	 assertEquals(JWTException.class, exception.getClass());
     }
 }
